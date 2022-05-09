@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Persistence</string>
+    <string name="button_write">Write</string>
+    <string name="button_read">Read</string>
+    <string name="car_brand">Car brand</string>
+    <string name="car_model">Car model</string>
+    <string name="top_speed">top speed</string>
 </resources>
