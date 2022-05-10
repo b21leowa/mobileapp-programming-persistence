@@ -1,42 +1,72 @@
 
 # Rapport
 
-**Skriv din rapport här!**
+Forked the project and did a test commit to see if the correct account is connected to github.
+Then I added layout for the MainActivity and added the database class. I structured the DatabaseTable and added DatabaseHelper
+The DatabaseTable is structured with the correct number of rows and data type.
+Then I added functionality in the DatabaseHelper so the table is created when the database version changes (onUpgrade). Also added SQL_DELETE_TABLE_CARS in the DatabaseTable class.
+In the MainActivity I findViewById on all the EditText needed and did addCars method. In this commit you can see that topspeed = findViewById(R.id.car_model) instead of findViewById(R.id.topspeed).
+This issue took some time to find out and it was due to copy paste.
+Next commit I changed it to the correct EditText and added autoincrement on the ID and changed the int to integer in topspeed. Now you can add cars into the database.
 
-_Du kan ta bort all text som finns sedan tidigare_.
+Then I created the Cars class for each car with the correct variables: id, brand, model, topspeed and added the getters for the variables.
+To fetch the rows from the database I created an ArrayList<Car> and fetched it with Cursor. Cursor creates a new car with the values from the rows in the database.
 
-## Följande grundsyn gäller dugga-svar:
+Removed the textViews in MainActivity because the assignment says the data should append into the TextViews.
 
-- Ett kortfattat svar är att föredra. Svar som är längre än en sida text (skärmdumpar och programkod exkluderat) är onödigt långt.
-- Svaret skall ha minst en snutt programkod.
-- Svaret skall inkludera en kort övergripande förklarande text som redogör för vad respektive snutt programkod gör eller som svarar på annan teorifråga.
-- Svaret skall ha minst en skärmdump. Skärmdumpar skall illustrera exekvering av relevant programkod. Eventuell text i skärmdumpar måste vara läsbar.
-- I de fall detta efterfrågas, dela upp delar av ditt svar i för- och nackdelar. Dina för- respektive nackdelar skall vara i form av punktlistor med kortare stycken (3-4 meningar).
+```Java
+//The cars table
+"CREATE TABLE " + Cars.TABLE_NAME + " (" +
+                        Cars.COLUMN_NAME_ID + "INTEGER PRIMARY KEY," +
+                        Cars.COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                        Cars.COLUMN_NAME_BRAND + " TEXT," +
+                        Cars.COLUMN_NAME_MODEL + " TEXT," +
+                        Cars.COLUMN_NAME_TOPSPEED + " INT)";
+                        Cars.COLUMN_NAME_TOPSPEED + " INTEGER)";
 
-Programkod ska se ut som exemplet nedan. Koden måste vara korrekt indenterad då den blir lättare att läsa vilket gör det lättare att hitta syntaktiska fel.
 
-```
-function errorCallback(error) {
-    switch(error.code) {
-        case error.PERMISSION_DENIED:
-            // Geolocation API stöds inte, gör något
-            break;
-        case error.POSITION_UNAVAILABLE:
-            // Misslyckat positionsanrop, gör något
-            break;
-        case error.UNKNOWN_ERROR:
-            // Okänt fel, gör något
-            break;
+//MainActivity, add cars
+addCars(brand.getText().toString(), model.getText().toString(), Integer.parseInt(topspeed.getText().toString()));
+
+
+//addCars method
+private long addCars(String brand, String model, int topspeed){
+        values.put(DatabaseTables.Cars.COLUMN_NAME_BRAND, brand);
+        values.put(DatabaseTables.Cars.COLUMN_NAME_MODEL, model);
+        values.put(DatabaseTables.Cars.COLUMN_NAME_TOPSPEED, topspeed);
+        System.out.print(values);
+        return database.insert(DatabaseTables.Cars.TABLE_NAME, null, values);
     }
-}
+
+//getCar from getFields is clicked
+getFields.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                carsList = getCars();
+                for (Car car: carsList) {
+                    carView.append(car.getCarBrand() + " " + car.getCarModel() + " with top speed of " + car.getTopspeedString() + " km/h \n");
+                }
+            }
+        });
+
+//Fetch car
+private ArrayList<Car> getCars() {
+        Cursor cursor = database.query(DatabaseTables.Cars.TABLE_NAME, null, null, null,null,null,null);
+        ArrayList<Car> cars = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            Car car = new Car(
+                    cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseTables.Cars.COLUMN_NAME_ID)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(DatabaseTables.Cars.COLUMN_NAME_BRAND)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(DatabaseTables.Cars.COLUMN_NAME_MODEL)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseTables.Cars.COLUMN_NAME_TOPSPEED))
+            );
+            cars.add(car);
+        }
+        cursor.close();
+        return cars;
+    }
+
 ```
 
-Bilder läggs i samma mapp som markdown-filen.
+![](finalProduct.png)
 
-![](android.png)
-
-Läs gärna:
-
-- Boulos, M.N.K., Warren, J., Gong, J. & Yue, P. (2010) Web GIS in practice VIII: HTML5 and the canvas element for interactive online mapping. International journal of health geographics 9, 14. Shin, Y. &
-- Wunsche, B.C. (2013) A smartphone-based golf simulation exercise game for supporting arthritis patients. 2013 28th International Conference of Image and Vision Computing New Zealand (IVCNZ), IEEE, pp. 459–464.
-- Wohlin, C., Runeson, P., Höst, M., Ohlsson, M.C., Regnell, B., Wesslén, A. (2012) Experimentation in Software Engineering, Berlin, Heidelberg: Springer Berlin Heidelberg.
