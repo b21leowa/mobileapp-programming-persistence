@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText model;
     private EditText topspeed;
     private Button submitFields;
+    private Byte nullValue = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +29,13 @@ public class MainActivity extends AppCompatActivity {
 
         brand = findViewById(R.id.car_brand);
         model = findViewById(R.id.car_model);
-        topspeed = findViewById(R.id.car_model);
+        topspeed = findViewById(R.id.top_speed);
         submitFields = findViewById(R.id.button_write);
 
         submitFields.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                addCars(brand.getText().toString(), model.getText().toString(), Integer.parseInt(topspeed.getText().toString()));
             }
         });
     }
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         values.put(DatabaseTables.Cars.COLUMN_NAME_BRAND, brand);
         values.put(DatabaseTables.Cars.COLUMN_NAME_MODEL, model);
         values.put(DatabaseTables.Cars.COLUMN_NAME_TOPSPEED, topspeed);
+        System.out.print(values);
         return database.insert(DatabaseTables.Cars.TABLE_NAME, null, values);
     }
 }
