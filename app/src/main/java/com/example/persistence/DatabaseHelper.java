@@ -15,11 +15,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
+        sqLiteDatabase.execSQL(DatabaseTables.SQL_CREATE_TABLE_CARS);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
+        sqLiteDatabase.execSQL(DatabaseTables.SQL_DELETE_TABLE_CARS);
+        onCreate(sqLiteDatabase);
     }
 }

@@ -16,4 +16,9 @@ public class DatabaseTables {
                         Cars.COLUMN_NAME_BRAND + " TEXT," +
                         Cars.COLUMN_NAME_MODEL + " TEXT," +
                         Cars.COLUMN_NAME_TOPSPEED + " INT)";
+
+    static final String SQL_DELETE_TABLE_CARS =
+            // "DROP TABLE IF EXISTS mountain"
+            "DROP TABLE IF EXISTS " + Cars.TABLE_NAME;
+
 }
